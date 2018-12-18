@@ -1387,7 +1387,12 @@ plupload.Uploader = function(options) {
 						reinitRequired = true;
 					}
 					break;
-
+				case 'add_additional_name':
+					settings[option] = value;
+					if (value === false) {
+						settings.add_additional_name = value;
+					}
+					break;
 				default:
 					settings[option] = value;
 			}
@@ -1612,6 +1617,12 @@ plupload.Uploader = function(options) {
 
 				formData = new o.xhr.FormData();
 
+				// Remove 'name' filed from the form
+				if (up.settings.add_additional_name === false) {
+					delete up.settings.multipart_params.name
+					delete args.name
+				}
+
 				// Add multipart params
 				plupload.each(plupload.extend(args, up.settings.multipart_params), function(value, name) {
 					formData.append(name, value);
@@ -1767,7 +1778,8 @@ plupload.Uploader = function(options) {
 		runtimes: Runtime.order,
 		send_file_name: true,
 		send_chunk_number: true,
-		silverlight_xap_url: 'js/Moxie.xap'
+		silverlight_xap_url: 'js/Moxie.xap',
+		add_additional_name: true
 	};
 
 
